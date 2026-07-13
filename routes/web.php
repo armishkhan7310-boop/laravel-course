@@ -49,3 +49,16 @@ Route::get('/operators', function () {
     ";
 
 });
+Route::get('/arrays', function () {
+
+    $students = ["Ali", "Ahmed", "Armish", "Areeba", "Hanan"];
+
+    return "
+    Student 1: $students[0] <br>
+    Student 2: $students[1] <br>
+    Student 3: $students[2] <br>
+    Student 4: $students[3] <br>
+    Student 5: $students[4]
+    ";
+
+});
