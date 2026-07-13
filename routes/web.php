@@ -62,3 +62,14 @@ Route::get('/arrays', function () {
     ";
 
 });
+
+Route::get('/functions', function () {
+
+    $student = function($name)
+    {
+        return "Student Name: " . $name;
+    };
+
+    return $student("Armish");
+
+});
