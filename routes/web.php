@@ -73,3 +73,104 @@ Route::get('/functions', function () {
     return $student("Armish");
 
 });
+Route::get('/class', function () {
+
+    class Student
+    {
+        public $name;
+        public $age;
+
+        public function showData()
+        {
+            return "Name: " . $this->name . "<br>Age: " . $this->age;
+        }
+    }
+
+
+    $student = new Student();
+
+    $student->name = "Armish";
+    $student->age = 22;
+
+    return $student->showData();
+
+});
+Route::get('/inheritance', function () {
+
+    class Person
+    {
+        public $name;
+
+        public function showName()
+        {
+            return "Name: " . $this->name;
+        }
+    }
+
+
+    class Student extends Person
+    {
+        public $course;
+
+        public function showCourse()
+        {
+            return "<br>Course: " . $this->course;
+        }
+    }
+
+
+    $student = new Student();
+
+    $student->name = "Armish";
+    $student->course = "BS Data Science";
+
+
+    return $student->showName() . $student->showCourse();
+
+});
+Route::get('/traits', function () {
+
+    trait Message
+    {
+        public function sendMessage()
+        {
+            return "Hello Armish! This message is coming from Trait.";
+        }
+    }
+
+
+    class Student
+    {
+        use Message;
+    }
+
+
+    class Teacher
+    {
+        use Message;
+    }
+
+
+    $student = new Student();
+    $teacher = new Teacher();
+
+
+    return $student->sendMessage() . "<br>" . $teacher->sendMessage();
+
+});
+Route::get('/namespace', function () {
+
+    class StudentProfile
+    {
+        public function info()
+        {
+            return "Student Name: Armish <br> Department: Data Science";
+        }
+    }
+
+
+    $student = new StudentProfile();
+
+    return $student->info();
+
+});
