@@ -174,3 +174,13 @@ Route::get('/namespace', function () {
     return $student->info();
 
 });
+use App\Http\Controllers\PageController;
+
+
+Route::get('/home', [PageController::class, 'home']);
+
+Route::get('/about', [PageController::class, 'about']);
+
+Route::get('/students', [PageController::class, 'students']);
+
+Route::get('/contact', [PageController::class, 'contact']);
