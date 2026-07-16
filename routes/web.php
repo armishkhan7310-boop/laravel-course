@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StudentController;
+Route::get('/students', [StudentController::class, 'index']);
+Route::post('/students', [StudentController::class, 'store']);
 
 /*
 |--------------------------------------------------------------------------
@@ -180,7 +183,5 @@ use App\Http\Controllers\PageController;
 Route::get('/home', [PageController::class, 'home']);
 
 Route::get('/about', [PageController::class, 'about']);
-
-Route::get('/students', [PageController::class, 'students']);
 
 Route::get('/contact', [PageController::class, 'contact']);
