@@ -4,20 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Course;
+use App\Models\Student;
 
-class Student extends Model
+class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'age',
-        'course_id',
-    ];
-
-   public function courseRelation()
+    public function courseRelation()
 {
     return $this->belongsTo(Course::class, 'course_id');
 }

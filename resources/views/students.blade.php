@@ -23,9 +23,18 @@
     <label>Email</label><br>
     <input type="email" name="email" value="{{ old('email') }}" class="form-control">
 
-    <label>Department</label><br>
-    <input type="text" name="course" value="{{ old('course') }}" class="form-control">
+   <label>Course</label><br>
 
+<select name="course_id" class="form-control">
+    <option value="">-- Select Course --</option>
+
+    @foreach($courses as $course)
+        <option value="{{ $course->id }}">
+            {{ $course->course_name }}
+        </option>
+    @endforeach
+
+</select>
     <button type="submit" class="btn btn-primary">Submit</button>
 
 </form>
@@ -48,7 +57,7 @@
    <tr>
     <td>{{ $student->name }}</td>
     <td>{{ $student->email }}</td>
-    <td>{{ $student->course }}</td>
+    <td>{{ $student->courseRelation ? $student->courseRelation->course_name : 'No Course' }}</td>
     <td>
     <a href="/students/{{ $student->id }}/edit">Edit</a>
 

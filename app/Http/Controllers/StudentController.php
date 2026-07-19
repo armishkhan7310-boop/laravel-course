@@ -8,25 +8,26 @@ class StudentController extends Controller
 {
     public function index()
     {
-        $students = \App\Models\Student::all();
+       $students = \App\Models\Student::with('courseRelation')->get();
 
-        return view('students', compact('students'));
+     $courses = \App\Models\Course::all();
+
+return view('students', compact('students', 'courses'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:students,email',
-            'course' => 'required'
-        ]);
-
+    'name' => 'required',
+    'email' => 'required|email|unique:students,email',
+    'course_id' => 'required'
+]);
         \App\Models\Student::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'course' => $request->course,
-            'age' => 0
-        ]);
+    'name' => $request->name,
+    'email' => $request->email,
+    'course_id' => $request->course_id,
+    'age' => 0
+]);
 
         return redirect('/students');
     }
