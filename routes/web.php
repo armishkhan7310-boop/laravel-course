@@ -29,3 +29,11 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+use App\Http\Controllers\AdminController;
+
+Route::get('/admin/dashboard', [AdminController::class, 'index'])
+    ->middleware(['auth', 'admin'])
+    ->name('admin.dashboard');
+    Route::get('/students/delete-test', function () {
+    return "You can delete students";
+})->middleware(['auth','permission:delete_students']);
