@@ -4,8 +4,25 @@
 
 <x-message />
 
+<!-- Search Form -->
+<form action="/students" method="GET" class="mb-4">
+
+    <input type="text" 
+           name="search" 
+           placeholder="Search Student"
+           value="{{ request('search') }}"
+           class="form-control mb-2">
+
+    <button type="submit" class="btn btn-success">
+        Search
+    </button>
+
+</form>
+
+
 <h2>Student Registration Form</h2>
 
+<!-- Add Student Form -->
 <form action="/students" method="POST" enctype="multipart/form-data" class="card p-4 shadow">
 
     @csrf
@@ -20,131 +37,199 @@
         </div>
     @endif
 
+
     <div class="mb-3">
         <label>Student Name</label>
-        <input type="text" name="name" value="{{ old('name') }}" class="form-control">
+        <input type="text" 
+               name="name" 
+               value="{{ old('name') }}" 
+               class="form-control">
     </div>
+
 
     <div class="mb-3">
         <label>Email</label>
-        <input type="email" name="email" value="{{ old('email') }}" class="form-control">
+        <input type="email" 
+               name="email" 
+               value="{{ old('email') }}" 
+               class="form-control">
     </div>
+
 
     <div class="mb-3">
         <label>Course</label>
 
         <select name="course_id" class="form-control">
-            <option value="">-- Select Course --</option>
+
+            <option value="">
+                -- Select Course --
+            </option>
 
             @foreach($courses as $course)
+
                 <option value="{{ $course->id }}">
                     {{ $course->course_name }}
                 </option>
+
             @endforeach
 
         </select>
+
     </div>
 
+
     <div class="mb-3">
+
         <label>Student Image</label>
-        <input type="file" name="image" class="form-control">
+
+        <input type="file" 
+               name="image" 
+               class="form-control">
+
     </div>
+
 
     <button type="submit" class="btn btn-primary">
         Submit
     </button>
 
+
 </form>
+
 
 <hr>
 
+
 <h2>Students List</h2>
+
 
 <table class="table table-bordered table-striped mt-4">
 
-    <thead>
 
-        <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Department</th>
-            <th>Action</th>
-        </tr>
+<thead>
 
-    </thead>
+<tr>
 
-    <tbody>
+    <th>Image</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Department</th>
+    <th>Action</th>
 
-        @foreach($students as $student)
+</tr>
 
-        <tr>
+</thead>
 
-            <td>
 
-                @if($student->image)
+<tbody>
 
-                    <img src="{{ asset('storage/'.$student->image) }}"
-                         width="70"
-                         height="70"
-                         style="border-radius:50%; object-fit:cover;">
 
-                @else
+@foreach($students as $student)
 
-                    No Image
 
-                @endif
+<tr>
 
-            </td>
 
-            <td>{{ $student->name }}</td>
+<td>
 
-            <td>{{ $student->email }}</td>
+@if($student->image)
 
-            <td>
+<img src="{{ asset('storage/'.$student->image) }}"
+     width="70"
+     height="70"
+     style="border-radius:50%; object-fit:cover;">
 
-                @if($student->courseRelation)
+@else
 
-                    {{ $student->courseRelation->course_name }}
+No Image
 
-                @else
+@endif
 
-                    No Course
+</td>
 
-                @endif
 
-            </td>
 
-            <td>
+<td>
+    {{ $student->name }}
+</td>
 
-                <a href="/students/{{ $student->id }}/edit"
-                   class="btn btn-warning btn-sm">
 
-                    Edit
 
-                </a>
+<td>
+    {{ $student->email }}
+</td>
 
-                <form action="/students/{{ $student->id }}"
-                      method="POST"
-                      style="display:inline;">
 
-                    @csrf
-                    @method('DELETE')
 
-                    <button class="btn btn-danger btn-sm">
-                        Delete
-                    </button>
+<td>
 
-                </form>
+@if($student->courseRelation)
 
-            </td>
+    {{ $student->courseRelation->course_name }}
 
-        </tr>
+@else
 
-        @endforeach
+    No Course
 
-    </tbody>
+@endif
+
+</td>
+
+
+
+<td>
+
+
+<a href="/students/{{ $student->id }}/edit"
+   class="btn btn-warning btn-sm">
+
+    Edit
+
+</a>
+
+
+
+<form action="/students/{{ $student->id }}"
+      method="POST"
+      style="display:inline;">
+
+    @csrf
+    @method('DELETE')
+
+
+    <button class="btn btn-danger btn-sm">
+
+        Delete
+
+    </button>
+
+
+</form>
+
+
+</td>
+
+
+
+</tr>
+
+
+@endforeach
+
+
+</tbody>
+
 
 </table>
+
+
+<!-- Pagination -->
+
+<div class="mt-3">
+
+    {{ $students->links() }}
+
+</div>
+
 
 @endsection

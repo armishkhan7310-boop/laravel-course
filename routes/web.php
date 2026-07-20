@@ -46,18 +46,6 @@ Route::get('/students/delete-test', function () {
 // ==============================
 // Student Management Routes
 // ==============================
+// Student Management Resource Routes
 
-// Students List
-Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-
-// Add Student
-Route::post('/students', [StudentController::class, 'store'])->name('students.store');
-
-// Edit Student Form
-Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
-
-// Update Student
-Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
-
-// Delete Student
-Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+Route::resource('students', StudentController::class);

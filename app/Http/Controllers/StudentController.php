@@ -9,13 +9,19 @@ use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
-    public function index()
-    {
-        $students = Student::with('courseRelation')->get();
-        $courses = Course::all();
+  public function index(Request $request)
+{
+    $search = $request->search;
 
-        return view('students', compact('students', 'courses'));
-    }
+    $students = Student::with('courseRelation')
+        ->where('name', 'like', "%$search%")
+        ->orWhere('email', 'like', "%$search%")
+        ->paginate(5);
+
+    $courses = Course::all();
+
+    return view('students', compact('students', 'courses'));
+}
 
     public function store(Request $request)
     {
@@ -43,17 +49,51 @@ class StudentController extends Controller
         return redirect('/students');
     }
 
-    public function edit($id)
-    {
-        $student = Student::findOrFail($id);
+  public function edit(Student $student)
+{
+    $courses = Course::all();
 
-        return view('edit', compact('student'));
+    return view('edit', compact('student','courses'));
+}
+
+   public function update(Request $request, Student $student)
+{
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'course_id' => 'required',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+
+    $imageName = $student->image;
+
+
+    if ($request->hasFile('image')) {
+
+
+        if ($student->image) {
+            Storage::disk('public')->delete($student->image);
+        }
+
+
+        $imageName = $request->file('image')->store('students', 'public');
+
     }
 
-    public function update(Request $request, $id)
-    {
-        return redirect('/students');
-    }
+
+    $student->update([
+
+        'name' => $request->name,
+        'email' => $request->email,
+        'course_id' => $request->course_id,
+        'image' => $imageName,
+
+    ]);
+
+
+    return redirect('/students');
+}
 
     public function destroy($id)
     {
