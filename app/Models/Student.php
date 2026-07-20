@@ -15,10 +15,11 @@ class Student extends Model
         'email',
         'age',
         'course_id',
+        'image',
     ];
 
-   public function courseRelation()
-{
-    return $this->belongsTo(Course::class, 'course_id');
-}
+    public function courseRelation()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
+    }
 }

@@ -3,60 +3,63 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Student;
+use App\Models\Course;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
     public function index()
     {
-       $students = \App\Models\Student::with('courseRelation')->get();
+        $students = Student::with('courseRelation')->get();
+        $courses = Course::all();
 
-     $courses = \App\Models\Course::all();
-
-return view('students', compact('students', 'courses'));
+        return view('students', compact('students', 'courses'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-    'name' => 'required',
-    'email' => 'required|email|unique:students,email',
-    'course_id' => 'required'
-]);
-        \App\Models\Student::create([
-    'name' => $request->name,
-    'email' => $request->email,
-    'course_id' => $request->course_id,
-    'age' => 0
-]);
+            'name' => 'required',
+            'email' => 'required|email|unique:students,email',
+            'course_id' => 'required',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $imageName = null;
+
+        if ($request->hasFile('image')) {
+            $imageName = $request->file('image')->store('students', 'public');
+        }
+
+        Student::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'course_id' => $request->course_id,
+            'age' => 0,
+            'image' => $imageName,
+        ]);
 
         return redirect('/students');
     }
 
-    // 👇 Ye function yahan add karna hai
-   public function edit($id)
-{
-    $student = \App\Models\Student::find($id);
+    public function edit($id)
+    {
+        $student = Student::findOrFail($id);
 
-    return view('edit', compact('student'));
-}
-public function update(Request $request, $id)
-{
-    $student = \App\Models\Student::find($id);
+        return view('edit', compact('student'));
+    }
 
-    $student->name = $request->name;
-    $student->email = $request->email;
-    $student->course = $request->course;
+    public function update(Request $request, $id)
+    {
+        return redirect('/students');
+    }
 
-    $student->save();
+    public function destroy($id)
+    {
+        $student = Student::findOrFail($id);
+        $student->delete();
 
-    return redirect('/students');
-}
-public function destroy($id)
-{
-    $student = \App\Models\Student::find($id);
-
-    $student->delete();
-
-    return redirect('/students');
-}
+        return redirect('/students');
+    }
 }
