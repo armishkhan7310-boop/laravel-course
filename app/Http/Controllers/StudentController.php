@@ -95,11 +95,10 @@ class StudentController extends Controller
     return redirect('/students');
 }
 
-    public function destroy($id)
-    {
-        $student = Student::findOrFail($id);
-        $student->delete();
+  public function destroy(Student $student)
+{
+    $student->delete();
 
-        return redirect('/students');
-    }
+    return redirect('/students');
+}
 }
