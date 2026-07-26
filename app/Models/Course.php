@@ -10,8 +10,12 @@ class Course extends Model
 {
     use HasFactory;
 
-    public function courseRelation()
-{
-    return $this->belongsTo(Course::class, 'course_id');
-}
+    protected $fillable = [
+        'course_name',
+    ];
+
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'course_id');
+    }
 }

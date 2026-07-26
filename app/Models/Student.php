@@ -18,7 +18,7 @@ class Student extends Model
         'image',
     ];
 
-    public function courseRelation()
+    public function course()
     {
         return $this->belongsTo(Course::class, 'course_id');
     }
