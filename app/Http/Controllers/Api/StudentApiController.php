@@ -99,23 +99,23 @@ class StudentApiController extends Controller
     }
 
     // Delete Student
-    public function destroy($id)
-    {
-        $student = Student::find($id);
+  public function destroy($id)
+{
+    $student = Student::find($id);
 
-       if (!$student) {
-    return response()->json([
-        'status' => false,
-        'message' => 'Student not found',
-        'data' => null
-    ], 404);
-}
-
-        $student->delete();
-
-       return response()->json([
-    'status' => true,
-    'message' => 'Student Deleted Successfully'
-], 200);
+    if (!$student) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Student not found',
+            'data' => null
+        ], 404);
     }
+
+    $student->delete();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Student Deleted Successfully'
+    ], 200);
+}
 }
