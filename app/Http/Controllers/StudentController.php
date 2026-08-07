@@ -9,19 +9,24 @@ use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
-  public function index(Request $request)
-{
-    $search = $request->search;
+    public function index(Request $request)
+    {
+        $search = $request->search;
 
-    $students = Student::with('courseRelation')
-        ->where('name', 'like', "%$search%")
-        ->orWhere('email', 'like', "%$search%")
-        ->paginate(5);
+        // 'courseRelation' ko badal kar 'course' kar diya hai
+        $students = Student::with('course')
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->paginate(5);
 
-    $courses = Course::all();
+        $courses = Course::all();
 
-    return view('students', compact('students', 'courses'));
-}
+        return view('students', compact('students', 'courses'));
+    }
 
     public function store(Request $request)
     {
@@ -49,56 +54,29 @@ class StudentController extends Controller
         return redirect('/students');
     }
 
-  public function edit(Student $student)
-{
-    $courses = Course::all();
+    public function edit(Student $student)
+    {
+        $courses = Course::all();
 
-    return view('edit', compact('student','courses'));
-}
+        return view('edit', compact('student', 'courses'));
+    }
 
-   public function update(Request $request, Student $student)
-{
-    $request->validate([
-        'name' => 'required',
-        'email' => 'required|email',
-        'course_id' => 'required',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    ]);
+    public function update(Request $request, $id)
+    {
+        return redirect('/students');
+    }
 
-
-    $imageName = $student->image;
-
-
-    if ($request->hasFile('image')) {
-
-
+    public function destroy($id)
+    {
+        $student = Student::findOrFail($id);
+        
+        // Image delete karne ka option (agar image mojood ho)
         if ($student->image) {
             Storage::disk('public')->delete($student->image);
         }
 
+        $student->delete();
 
-        $imageName = $request->file('image')->store('students', 'public');
-
+        return redirect('/students');
     }
-
-
-    $student->update([
-
-        'name' => $request->name,
-        'email' => $request->email,
-        'course_id' => $request->course_id,
-        'image' => $imageName,
-
-    ]);
-
-
-    return redirect('/students');
-}
-
-  public function destroy(Student $student)
-{
-    $student->delete();
-
-    return redirect('/students');
-}
 }

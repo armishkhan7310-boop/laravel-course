@@ -4,7 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\CourseController;
 
+
+Route::resource('courses', CourseController::class);
 /*
 |--------------------------------------------------------------------------
 | Web Routes
